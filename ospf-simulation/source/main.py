@@ -32,7 +32,7 @@ for router_id in routers:
     print(f"Router {router_id} initialized.")
     time.sleep(0.5)
 
-# Step 2: Define neighbor relationships
+# Step 2: Define neighbor relationships and initalise costs randomly
 print("\n--- Defining Neighbor Relationships ---")
 for src, dest in links:
     cost = random.randint(1, 5)
@@ -60,14 +60,14 @@ for r in routers.values():
         print(f"Router {other.router_id} received LSA from {r.router_id}: {lsa}")
         time.sleep(0.5)
 
-# Step 5: Build the network topology graph
+# Step 4: Build the network topology graph once all LSAs are received based on the perspective of one router
 print("\n--- Building Network Topology ---")
 sample_router = routers["A"]
 G = build_graph_from_lsdb(sample_router.lsdb)
 time.sleep(0.5)
 print("Network topology graph built.")
 
-# Step 4: Calculate and display routing tables for each router
+# Step 5: Calculate and display routing tables for each router
 print("\033[92m--- Routing Tables ---\033[0m")
 for router_id in routers:
     print(f"\n\033[92mRouter {router_id} running SPF algorithm...\033[0m")
@@ -78,6 +78,7 @@ for router_id in routers:
 
 # Step 6: Visualize the entire network graph once
 print("\n--- Visualizing Network Topology ---")
+# Pos fixes the positions of the nodes in the graph for better visualization
 pos = {
     "A": (0, 2),
     "B": (1, 3),
@@ -88,6 +89,7 @@ pos = {
     "G": (3, 1),
     }
 
+# Draw the graph with labels and edge weights
 nx.draw(G, pos, with_labels=True, node_color='lightblue', node_size=800)
 nx.draw_networkx_edge_labels(
     G, pos,
